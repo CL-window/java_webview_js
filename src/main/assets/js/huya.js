@@ -5731,10 +5731,6 @@ function TafHandler() {
         }
 };
 
-function justTest(msg,msg2) {
-    alert("jsFun..." + msg + "," + msg2);
-};
-
 
 G = {
         topsid: "0",
@@ -5769,50 +5765,36 @@ function HuYaListener(topsid,subsid){
         n.tUserId = a, n.sMd5 = "", n.iTemplateType = HUYA.EClientTemplateType.TPL_PC, n.sVersion = "", console.log("send_init"), s.sendWup("PropsUIServer", "getPropsList", n)
     }
 
-    var s = new TafHandler, a = new HUYA.UserId, c = this;
+    var s = new TafHandler, a = new HUYA.UserId , c = this;
 
     s.addListener("WEBSOCKET_CONNECTED", function () {
         a.lUid = G.yyuid, a.sGuid = "", a.sToken = "", a.sHuYaUA = "webh5&1.0.0&websocket", a.sCookie = "", t(), i();
-        HuYa.huyaChartMessage("WEBSOCKET_CONNECTED");
+        HuYa.huyaLogin("WEBSOCKET_CONNECTED");
     }), s.addListener("doLaunch", function (n) {
         a.sGuid = n.sGuid, o(), e();
-        HuYa.huyaChartMessage("doLaunch");
+        HuYa.huyaLogin("doLaunch");
     }), s.addListener("WSRegisterRsp", function () {
+        HuYa.huyaLogin("WSRegisterRsp");
     }), s.addListener("userIn", function (n) {
         console.log("<<< \u6210\u529f\u8fdb\u5165\u9891\u9053 ", n);
-        HuYa.huyaChartMessage("userIn : + \u6210\u529f\u8fdb\u5165\u9891\u9053 ");
+        HuYa.huyaLogin("userIn : + \u6210\u529f\u8fdb\u5165\u9891\u9053 ");
     }), s.addListener("8006", function (n) {
-        c.$liveCount.text(n.iAttendeeCount);
-        HuYa.huyaChartMessage("8006 : " + n.iAttendeeCount);
+        console.log("8006", n.iAttendeeCount);
+        HuYa.huyaAttendeeCount( n.iAttendeeCount);
     }), s.addListener("1400", function (n) {
         var t = {type: 0, nick: n.tUserInfo.sNickName, msg: n.sContent};
-        c.tanmu.receive(t);
-        HuYa.huyaChartMessage("1400 : " + t);
+        console.log("1400", t);
+        HuYa.huyaChartMessage(n.tUserInfo.sNickName,n.sContent);
     }), s.addListener("6501", function (n) {
         console.log("6501", n);
-        var t = n.iItemType.toString(), o = {
-            type: 1,
-            nick: n.sSenderNick,
-            propName: c.tanmu.propsInfo[t].propName,
-            icon: c.tanmu.propsInfo[t].propIcon,
-            count: n.iItemCount
-        };
-        c.tanmu.receive(o);
-        HuYa.huyaChartMessage("6501 : " + o);
+        HuYa.huyaDanMuMessage( n.sSenderNick , n.iItemCount);
     }), s.addListener("6502", function (n) {
         console.log("6502", n);
         HuYa.huyaChartMessage("6502 : " + n);
     }), s.addListener("getPropsList", function (n) {
         console.log("daoju-", n);
         var t = n.vPropsItemList.value;
-        $.each(t, function (n, t) {
-            c.tanmu.propsInfo[t.iPropsId] = {
-                propId: t.iPropsId,
-                propName: t.sPropsName,
-                propIcon: t.vPropsIdentity.value[0].sPropsPic24.split("&")[0]
-            };
-            HuYa.huyaChartMessage("daoju : " + c.tanmu.propsInfo[t.iPropsId]);
-        })
+        HuYa.huyaLogin("getPropsList size : " + t.length);
     })
 
 };

@@ -22,7 +22,6 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -40,9 +39,9 @@ public class MainActivity extends AppCompatActivity {
      * topSid
      * subSid
      */
-    private final static String HUYA_WEB_URL = "http://m.huya.com/" + "nicesss";
-    private final static String TOP_SID = "26133030";
-    private final static String SUB_SID = "2569343328";
+    private final static String HUYA_WEB_URL = "http://m.huya.com/" + "mianzai"; // only load js this is not need
+    private final static String TOP_SID = "69361899";
+    private final static String SUB_SID = "2545237228";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mRootView = (FrameLayout) findViewById(R.id.activity_main);
         initWebView();
-        mJsString = initAssertJSToString("huya.js");
+        mJsString = initAssertJSToString("js/huya.js");
     }
 
     private String initAssertJSToString(String assetName) {
@@ -96,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
          * 不在xml中定义 Webview ，而是在需要的时候在Activity中创建，
          * 并且Context使用 getApplicationgContext()
          */
-        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.MATCH_PARENT);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(1,1);
+//                FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.MATCH_PARENT);
 
         mWebView = new WebView(getApplicationContext());
         mWebView.setLayoutParams(params);
@@ -174,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
-                Log.i(TAG, "onReceivedError..." + error);
+                Log.i(TAG, "onReceivedError..." + error.getDescription().toString());
             }
         });
 
@@ -253,8 +252,18 @@ public class MainActivity extends AppCompatActivity {
          */
 //        mWebView.loadUrl(HUYA_WEB_URL);
 
+        /**
+         * 直接 js 的方法，现在想加入 jquery ,也可以类似 mJsString 读取一下，转String
+         * 感觉有点low，加载一个空白网页吧还是
+         */
         mWebView.loadUrl("javascript:" + mJsString);//注入js函数
         mWebView.loadUrl("javascript:HuYaListener("+TOP_SID+","+SUB_SID+")");//调用js函数
+
+        /**
+         * load empty html include local js
+         * test is ok
+         */
+//        mWebView.loadUrl("file:///android_asset/huya.html");
 
         /**
          * this test is ok
@@ -270,9 +279,44 @@ public class MainActivity extends AppCompatActivity {
      */
     public class HuYaWebInterface{
 
+        /**
+         * 登录 的 反馈 信息
+         */
         @JavascriptInterface
-        public void huyaChartMessage(String str) {
-            Log.i(TAG,"from JS : " + str);
+        public void huyaLogin(String str) {
+            Log.i(TAG,"login : " + str);
+        }
+
+        /**
+         * 1400 : 聊天信息
+         * @param nick  nickname
+         * @param msg message
+         */
+        @JavascriptInterface
+        public void huyaChartMessage(String nick,String msg) {
+            Log.i(TAG,"1400: nick: " + nick + " + msg: " + msg);
+        }
+
+        /**
+         * 6501 : tanmu
+         * 弹幕 信息暂时获取不到详情
+         * nick: n.sSenderNick,
+         * propName: c.tanmu.propsInfo[t].propName,
+         * icon: c.tanmu.propsInfo[t].propIcon,
+         * count: n.iItemCount
+         */
+        @JavascriptInterface
+        public void huyaDanMuMessage(String nick,String count) {
+            Log.i(TAG,"tanmu: nick: " + nick + " + count: " + count);
+        }
+
+        /**
+         * 在线人数 liveCount
+         * @param count
+         */
+        @JavascriptInterface
+        public void huyaAttendeeCount(String count) {
+            Log.i(TAG,"liveCount: " + count);
         }
     }
 
@@ -288,7 +332,7 @@ public class MainActivity extends AppCompatActivity {
          * 在log 里可以查看  test is ok
          */
 //        mWebView.loadUrl("javascript:" + JS_FUNCTION);//注入js函数
-//        mWebView.loadUrl("javascript:" + initAssertJSToString("testJs.js"));// read from file is also ok
+//        mWebView.loadUrl("javascript:" + initAssertJSToString("js/testJs.js"));// read from file is also ok
 //        mWebView.loadUrl("javascript:jsFun("+TOP_SID+")");//调用js函数
 //        mWebView.loadUrl("javascript:justTest("+TOP_SID+","+SUB_SID+")");// double param is also ok
     }
