@@ -38,6 +38,10 @@ public class MainActivity extends AppCompatActivity {
      * 房间号  ？
      * topSid
      * subSid
+     * topSid subSid 获取方式：
+     * 随便打开一个虎牙直播界面，
+     * chrome 浏览器 --> 更多工具-->开发者工具 -->
+     *                    或者直接 有机 检查 -->  -->(菜单栏 Elements Ctrl + F 查找 topSid)  复制这两个值即可
      */
     private final static String HUYA_WEB_URL = "http://m.huya.com/" + "mianzai"; // only load js this is not need
     private final static String TOP_SID = "69361899";
