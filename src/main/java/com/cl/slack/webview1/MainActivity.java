@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
      *                    或者直接 有机 检查 -->  -->(菜单栏 Elements Ctrl + F 查找 topSid)  复制这两个值即可
      */
     private final static String HUYA_WEB_URL = "http://m.huya.com/" + "mianzai"; // only load js this is not need
-    private final static String TOP_SID = "69361899";
-    private final static String SUB_SID = "2545237228";
+    private final static String TOP_SID = "77226790";
+    private final static String SUB_SID = "2565893989";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -348,7 +348,6 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this,message,Toast.LENGTH_SHORT).show();
         }
     }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -392,6 +391,7 @@ public class MainActivity extends AppCompatActivity {
 
         super.onDestroy();
     }
+
 
     @Override
     public void onBackPressed() {

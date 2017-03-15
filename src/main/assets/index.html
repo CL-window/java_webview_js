@@ -34,10 +34,30 @@
         }
     </script>
 
+    <style>
+        .result-box .result-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 25px; // //上 0px  左右自动     下 25px
+            background-repeat: no-repeat; //属性设置是否及如何重复背景图像
+            background-position: center;   //背景位置居中
+            background-size: cover;      /*background-size的cover特定值会保持图像本身的宽高比例，将图片缩放到正好完全覆盖定义背景的区域。*/
+            display: block;  //变成块状，这个属性一定要加，要不然不显示。因为<i>标签不是块级元素
+        }
+        .result-box .result-fail{
+            background-image:url(http://i8.pdim.gs/d6c7588a479e657e4d589a54f6075c8b.png) ;
+        }
+    </style>
 
 </head>
 <!--<body onload="myfun()">-->
 <body >
+    <!--test i ing -->
+    <li>
+        <div class="result-box">
+            <i class="result-icon result-fail"></i>
+        </div>
+    </li>
     <input type="text" id="nickname" name="NickName" value="slack"/><br/><br/>
     <input type="button" value="js call java" onclick="ok()">
 </body>
